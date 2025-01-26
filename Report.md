@@ -1,11 +1,9 @@
+#Roadmap
 
-
-## High-Level Roadmap
-
-1. **Set Up Development Environment**
-2. **Generate or Collect Synthetic Data**
+1. **Setting Up Development Environment**
+2. **Generating or Collect Synthetic Data**
 3. **Data Cleaning & Preprocessing**
-4. **(Optional) Data Augmentation**
+4. **Data Augmentation**
 5. **Multi-Label Text Classification**
 6. **Entity Extraction (Domain Knowledge Base + NER)**
 7. **Summarization**
@@ -15,10 +13,10 @@
 
 ---
 
-## 1. Set Up Development Environment
+## 1. Setting Up Development Environment
 
 ### Why This Step?
-You need a consistent place to run and share your code. This helps you avoid environment/version conflicts (e.g., differing library versions). It also makes it easier for others to replicate your work and ensures that your final Docker container will run correctly.
+We need a consistent place to run and share code. This helps us to avoid environment/version conflicts (e.g., differing library versions). It also makes it easier for others to replicate your work and ensures that your final Docker container will run correctly.
 
 ### How To Do It
 1. **Choose a coding environment**:
@@ -26,7 +24,7 @@ You need a consistent place to run and share your code. This helps you avoid env
    - **Local environment** (PyCharm, VSCode, etc.) if you prefer everything on your own machine.
    - **Virtual environment / Conda environment** to isolate your dependencies.
 
-2. **Install the required Python libraries**:
+2. **Installing the required Python libraries**:
    - `pandas`, `numpy` for data manipulation.
    - `scikit-learn` or `pytorch`/`tensorflow` for classification models.
    - `spaCy` or `transformers` (Hugging Face) for advanced NLP (optional but recommended).
@@ -38,17 +36,12 @@ You need a consistent place to run and share your code. This helps you avoid env
    - Create a **GitHub repository** (public, as requested).
    - Ensure you commit your code notebooks, Python scripts, and Dockerfiles.
 
-#### Pro Tip (Advanced but Simple):
-- Use [**Hugging Face Transformers**](https://github.com/huggingface/transformers) if you want a powerful pre-trained model approach for classification and NER. It’s widely recognized and can give you a strong baseline with minimal extra code.
 
----
-
-## 2. Generate or Collect Synthetic Data
+## 2. Generating or Collecting Synthetic Data
 
 ### Why This Step?
-The assignment requires a dataset (`calls_dataset.csv`) of at least 100 rows with multi-label categories. You also need a domain knowledge file (`domain_knowledge.json`) to do the dictionary-based entity extraction. The project is “synthetic,” so you’ll invent or semi-randomly generate the text snippets.
 
-### How To Do It
+How To Do It
 1. **Create your CSV** (`calls_dataset.csv`):
    - Fields:
      1. **id**: A unique identifier (e.g., 1, 2, 3…).
