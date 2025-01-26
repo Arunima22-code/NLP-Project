@@ -19,7 +19,7 @@
 We need a consistent place to run and share code. This helps us to avoid environment/version conflicts (e.g., differing library versions). It also makes it easier for others to replicate your work and ensures that your final Docker container will run correctly.
 
 ### How To Do It
-1. **Choose a coding environment**:
+1. **Choosing a coding environment**:
    - **Google Colab** (very common for quick AI experimentation; free GPU/TPU time).
    - **Local environment** (PyCharm, VSCode, etc.) if you prefer everything on your own machine.
    - **Virtual environment / Conda environment** to isolate your dependencies.
@@ -27,14 +27,12 @@ We need a consistent place to run and share code. This helps us to avoid environ
 2. **Installing the required Python libraries**:
    - `pandas`, `numpy` for data manipulation.
    - `scikit-learn` or `pytorch`/`tensorflow` for classification models.
-   - `spaCy` or `transformers` (Hugging Face) for advanced NLP (optional but recommended).
-   - `flask` or `fastapi` for building your REST API.
-   - `nltk` or `spacy` for text preprocessing, tokenization, etc.
-   - `docker` (eventually) for containerization, or Docker Desktop if you’re on Windows.
+   - `spaCy` or `transformers` (Hugging Face) for advanced NLP.
+     
 
 3. **Version Control**:
    - Create a **GitHub repository** (public, as requested).
-   - Ensure you commit your code notebooks, Python scripts, and Dockerfiles.
+   - Ensuring to commit your code notebooks, Python scripts, and Dockerfiles.
 
 
 ## 2. Generating or Collecting Synthetic Data
@@ -49,7 +47,7 @@ How To Do It
      3. **labels**: A comma-separated list of labels (e.g., “Positive, Pricing Discussion, Competition”).
    - Make sure you have a variety of text (at least 100 rows) to represent different scenarios: some that talk about pricing, some that mention competitors, some about product features, objections, compliance, security, etc.
 
-2. **Create the domain knowledge JSON** (`domain_knowledge.json`):
+2. **Creating the domain knowledge JSON** (`domain_knowledge.json`):
    - Example structure:
      ```json
      {
@@ -60,15 +58,12 @@ How To Do It
      ```
    - This dictionary will help for simple “string matching” to detect domain-specific entities.
 
-#### Pro Tip (Advanced but Simple):
-- **Randomization script**: Write a small Python script that picks random text pieces, competitor names, product features, etc., to automatically generate 100+ rows. This shows you’re systematically creating data instead of manually writing everything.
 
----
 
 ## Step 3: Data Cleaning & Preprocessing
 
 1. **Loading the Dataset**  
-   - **What**: We read our `calls_dataset.csv` into a DataFrame.  
+   - **What**: reading our `calls_dataset.csv` into a DataFrame.  
    - **Why**: We need a structured data format (DataFrame) to easily manipulate and inspect the text.
 
 2. **Removing Duplicates**  
@@ -91,15 +86,9 @@ How To Do It
    - **What**: We wrote the final output to `calls_dataset_cleaned.csv`.  
    - **Why**: Re-saving ensures all processing steps are done once, and we can reuse the cleaned file without repeating the cleaning each time.
 
----
-
-In **simple terms**: these steps transform raw, messy text into a consistent format, remove duplicates, and prepare our labels properly. This makes the data **ready** for the **modeling** stages (classification, entity extraction, etc.) so the algorithms can learn patterns more effectively.
-
----
 
 ### Documentation for Step 4: Data Augmentation
 
----
 
 #### **What is Data Augmentation?**
 Data augmentation involves creating new, slightly modified versions of existing data to improve the diversity of the dataset. In this case, we applied augmentation techniques to text snippets in the dataset to handle potential class imbalances and enhance the performance of the machine learning model.
@@ -123,20 +112,7 @@ We used the following augmentation techniques on each row of the dataset:
 
 For each row in the original dataset, **4 new augmented rows** were generated, resulting in a dataset 5 times larger than the original.
 
----
 
-#### **Code Implementation Summary**
-
-- **Input**: `calls_dataset_cleaned.csv` (150 rows).
-- **Output**: `augmented_calls_dataset.csv` (750 rows).
-
-Key Steps:
-1. Load the dataset with `pandas`.
-2. Apply augmentation techniques on each text snippet.
-3. Combine original and augmented rows.
-4. Save the combined dataset to a CSV file.
-
----
 
 #### **How Is This Helpful?**
 1. **Balanced Dataset**: Rare labels like "Objection" or "Security" now have more examples, reducing model bias toward common labels.
@@ -270,13 +246,10 @@ To train a machine learning model that can assign multiple labels (categories) t
 
 ---
 
-#### **Next Steps**
-With the trained model ready, we can move to **Step 6: Entity Extraction**, where we’ll extract specific details (like competitor names, compliance terms, pricing keywords) from the text snippets. Let me know when you’re ready to proceed!
-
 ## 6. Entity Extraction (Domain Knowledge Base + NER)
 
 ### Why This Step?
-You need to detect domain-specific keywords (like competitor names or discount mentions) but also be able to handle more general entity recognition (for example, “SOC2,” “ISO compliance,” or anything not in your domain dictionary).
+We  need to detect domain-specific keywords (like competitor names or discount mentions) but also be able to handle more general entity recognition (for example, “SOC2,” “ISO compliance,” or anything not in your domain dictionary).
 
 ### How To Do It
 1. **Dictionary Lookup**:
@@ -298,7 +271,7 @@ You need to detect domain-specific keywords (like competitor names or discount m
 
 3. **Merge Domain + NER Entities**:
    - Combine the dictionary-based entities with the general NER. 
-   - Potentially store them as:
+   - Potentially storing them as:
      ```json
      {
        "snippet_id": 1,
@@ -309,32 +282,11 @@ You need to detect domain-specific keywords (like competitor names or discount m
      }
      ```
 
-4. **Evaluation**:
-   - For domain-specific keywords, you can easily measure if your matches are correct.
-   - For general NER, you might do a quick manual check or rely on spaCy’s pre-trained performance.
-
-#### Pro Tip (Advanced but Simple):
-- If you want to “wow,” show how you handle synonyms. For example, if “CompetitorX” sometimes appears as “competitor X.” You can do a small fuzzy matching (`pip install fuzzywuzzy` or `rapidfuzz`) to catch small variations.
-
-----
-**Step 7: Summarization**!
----
 
 ## 7. Summarization
 
-### Why This Step?
-The assignment suggests generating a 1–2 sentence summary of the text snippet. This can be as simple or advanced as you want.
 
-### How To Do It
-1. **Basic Approach** (extractive summarization):
-   - Take the top-N most important sentences via a simple scoring method (like TF-IDF).
-   - If your “text_snippet” is very short (1-2 sentences anyway), you might just show part of the snippet.
-
-2. **Advanced Approach** (transformer-based):
-   - Use a Hugging Face summarization model (e.g., `distilbart-cnn-12-6` or `t5-small`).
-   - That might be overkill if your snippets are small, but it’s “flashy” and might impress.
-
-3. **Implementation**:
+**Implementation**:
    - Quick solution with Hugging Face:
      ```python
      from transformers import pipeline
@@ -343,166 +295,5 @@ The assignment suggests generating a 1–2 sentence summary of the text snippet.
      print(summary[0]['summary_text'])
      ```
 
----
 
-## 8. Building a REST API (or CLI)
-
-### Why This Step?
-Your final deliverable is a microservice that takes a text snippet and returns:
-1. Predicted Labels
-2. Extracted Entities
-3. Summary
-
-### How To Do It
-1. **Choose a framework**:
-   - **Flask**: Simple, common for quick APIs.
-   - **FastAPI**: More modern, automatically generates documentation at `/docs`.
-
-2. **Create the Endpoint**:
-   - A single `/predict` POST endpoint that accepts JSON like:
-     ```json
-     { "id": 1, "text_snippet": "We love the analytics, but CompetitorX has a cheaper subscription." }
-     ```
-   - Returns JSON like:
-     ```json
-     {
-       "labels": ["Positive", "Pricing Discussion", "Competition"],
-       "entities": {
-         "domain": ["CompetitorX"],
-         "general_ner": []
-       },
-       "summary": "We love the analytics but competitorx is cheaper."
-     }
-     ```
-
-3. **Structure your code**:
-   - **model.py**: loading your trained classification model (e.g., `pickle`, or a Hugging Face checkpoint).
-   - **ner_extraction.py**: your domain knowledge + spaCy code.
-   - **summarizer.py**: summarization pipeline or function.
-   - **app.py**: the Flask or FastAPI app.
-
-4. **Example Flask Snippet**:
-   ```python
-   from flask import Flask, request, jsonify
-   import joblib
-   import spacy
-
-   app = Flask(__name__)
-
-   # Load your model
-   model = joblib.load('multi_label_model.pkl')
-   vectorizer = joblib.load('vectorizer.pkl')
-   spacy_nlp = spacy.load("en_core_web_sm")
-
-   @app.route('/predict', methods=['POST'])
-   def predict():
-       data = request.json
-       text = data.get('text_snippet')
-       
-       # 1) Classification
-       text_vec = vectorizer.transform([text]) 
-       predicted = model.predict(text_vec)
-       # (You might convert predicted into label names here)
-       
-       # 2) Entity extraction
-       doc = spacy_nlp(text)
-       # plus dictionary lookup, etc.
-       
-       # 3) Summarization (if you integrated that)
-       # ...
-       
-       return jsonify({
-           "labels": ["PlaceholderLabel"],
-           "entities": {"domain": ["Placeholder"], "general_ner": []},
-           "summary": "A short summary"
-       })
-
-   if __name__ == '__main__':
-       app.run(host='0.0.0.0', port=5000)
-   ```
-
-#### Pro Tip (Advanced but Simple):
-- Implement a **test CLI** script that does something like:
-  ```bash
-  curl -X POST http://localhost:5000/predict \
-    -H 'Content-Type: application/json' \
-    -d '{"text_snippet": "We love the analytics..."}'
-  ```
-  This is nice for demonstration and for your README instructions.
-
----
-
-## 9. Containerization (Docker)
-
-### Why This Step?
-It ensures your code can run anywhere without environment setup issues. A major requirement is a `Dockerfile` that describes how to build the image.
-
-### How To Do It
-1. **Install Docker** on your machine or use a service like [Docker Hub].
-2. **Create a Dockerfile** (in the same folder as `app.py`):
-   ```dockerfile
-   FROM python:3.9-slim
-
-   # 1. Create a working directory
-   WORKDIR /app
-
-   # 2. Copy requirements
-   COPY requirements.txt .
-
-   # 3. Install dependencies
-   RUN pip install --no-cache-dir -r requirements.txt
-
-   # 4. Copy your code
-   COPY . .
-
-   # 5. Expose the port (Flask usually on 5000)
-   EXPOSE 5000
-
-   # 6. Command to run on container start
-   CMD ["python", "app.py"]
-   ```
-3. **Build and Run**:
-   - `docker build -t my-nlp-service .`
-   - `docker run -p 5000:5000 my-nlp-service`
-   - Test with a POST request to `http://localhost:5000/predict`.
-
-4. **(Optional) Deploy**:
-   - For bonus points, deploy to **Heroku** (or any container-friendly platform like AWS, Google Cloud).
-   - Make sure you add the `Procfile` for Heroku if needed:
-     ```
-     web: gunicorn app:app -b 0.0.0.0:$PORT
-     ```
-
-#### Pro Tip (Advanced but Simple):
-- If you have a GPU-based approach, you might check **NVIDIA Docker** or specify a base image with CUDA. But that’s more advanced and not always needed for a small assignment.
-
----
-
-## 10. Reporting & Final Submission
-
-### Why This Step?
-Your assignment specifically says you need:
-1. **Short Technical Report** (~3 pages max)
-2. **Public GitHub Repo** link
-3. **Shared Google Colab** link (if you used it)
-
-### How To Do It
-
-1. **Technical Report Outline**:
-   - **Data Handling**:
-     - Summarize how you cleaned the data, any augmentation, and label processing.
-   - **Modeling Choices**:
-     - Why did you pick a particular approach (e.g., BERT vs. logistic regression, etc.)?
-     - If you used advanced summarization or NER, mention it here.
-   - **Performance Results**:
-     - Provide your classification metrics (Precision, Recall, F1) for each label. 
-     - If you did NER or dictionary-based extraction, show some quick metrics or at least examples.
-     - Summarization can be shown with examples or any ROUGE scores if you’re advanced.
-   - **Error Analysis**:
-     - Show some snippets where your model predictions were wrong or partially correct, and discuss reasons.
-   - **Future Work**:
-     - Mention bigger dataset, more powerful language models, data augmentation strategies.
-
-2. **GitHub Repo**:
-   - Put your Dockerfile, your `app.py`, your model files (or instructions to download them if they’re large), dataset (`calls_dataset.csv`), domain knowledge file, and the short technical report (PDF or Markdown).
 
