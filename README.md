@@ -1,9 +1,4 @@
-Here’s a comprehensive **`README.md`** file with clear instructions on setup, running, and dependencies for your GitHub repository:
 
----
-
-```markdown
-# NLP Project
 
 This repository contains a Natural Language Processing (NLP) project designed for:
 - **Multi-label Text Classification** using transformer-based models.
@@ -21,12 +16,6 @@ This repository contains a Natural Language Processing (NLP) project designed fo
 
 ---
 
-## Getting Started
-
-### Prerequisites
-Ensure you have the following installed:
-1. Python 3.8 or above.
-2. Required libraries (install via `requirements.txt`).
 
 ### Setup Instructions
 1. **Clone the Repository**:
@@ -79,13 +68,7 @@ Ensure you have the following installed:
 
 ---
 
-## Project Structure
-- `project_notebook.ipynb`: Main Colab notebook with the full implementation.
-- `domain_knowledge.json`: JSON file containing domain-specific knowledge for entity extraction.
-- `README.md`: Project description and setup instructions.
-- `requirements.txt`: List of dependencies required to run the project.
 
----
 
 ## Example Usage
 Sample input text:
